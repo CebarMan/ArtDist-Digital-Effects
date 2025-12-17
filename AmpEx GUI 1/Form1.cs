@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
+using NAudio.Wave;
 
 namespace AmpEx_GUI_1
 {
