@@ -88,6 +88,7 @@
     <Compile Include="LoadPresetForm.Designer.cs">
       <DependentUpon>LoadPresetForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="PresetManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Form1.resx">

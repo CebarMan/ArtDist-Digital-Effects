@@ -27,17 +27,28 @@ namespace AmpEx_GUI_1
         private float currentDistAngle = -130.0f;
         private float currentGainAngle = -130.0f;
 
+        private IWavePlayer WaveOut;
+        private AudioFileReader audiofilereader;
+        private int pizza = 0;
+        PresetManager presetmanager = new PresetManager();
+
 
         public Form1()
         {
             InitializeComponent();
 
+            string AudioFile = "Crash-Cymbal-1.wav";
 
             KnobDist.BackColor = System.Drawing.Color.Transparent;
             KnobGain.BackColor = System.Drawing.Color.Transparent;
             KnobVol.BackColor = System.Drawing.Color.Transparent; 
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
+            audiofilereader = new AudioFileReader(AudioFile);
+
+            WaveOut = new WaveOutEvent();
+            WaveOut.Init(audiofilereader);
+            WaveOut.Play();
         }
 
         private void Generic_Knob_Paint(object sender, PaintEventArgs e)
@@ -80,6 +91,7 @@ namespace AmpEx_GUI_1
             int deltaY = dragStartY - mouseY;
             float sensitivity = 1f; // Justera för känslighet (1.5f = 1.5 grader per pixel)
             float newAngle = startAngle + (deltaY * sensitivity);
+            
 
             // 2. Begränsa vinkeln till det tillåtna intervallet (0 till MaxAngle)
             if (newAngle < -130) { newAngle = -130; }
@@ -91,7 +103,10 @@ namespace AmpEx_GUI_1
                 currentVolAngle = newAngle;
                 // Här översätter du currentVolAngle till det faktiska volymvärdet (0-100)
                 // float volumeValue = (newAngle / MaxAngle) * 100f; 
+                
                 textVol.Text = ((newAngle / 2.6) + 50).ToString();
+
+
             }
             else if (knobControl == KnobDist)
             {
@@ -123,11 +138,18 @@ namespace AmpEx_GUI_1
                 if (knobControl == KnobVol) startAngle = currentVolAngle;
                 else if (knobControl == KnobDist) startAngle = currentDistAngle;
                 else if (knobControl == KnobGain) startAngle = currentGainAngle;
+
+                pizza += 1;
+                if (pizza == 5)
+                {
+                    WaveOut.Play();
+                    pizza = 0;
+                }
             }
+
 
             // OBS: Vi anropar INTE UpdateSettingsAndImage här. Uppdateringen sker vid dragning.
         }
-
         private void picturebox_mouseMoving(object sender, MouseEventArgs e)
         {
             if (isDragging)
@@ -171,7 +193,7 @@ namespace AmpEx_GUI_1
             SaveFileName.Visible = true;
         }
 
-        private async void button1_Click(object sender, EventArgs e)
+        private async void SaveEnter_Click(object sender, EventArgs e)
         {
             string fileName = SaveFileName.Text.Trim();
 
@@ -186,83 +208,32 @@ namespace AmpEx_GUI_1
                 return;
             }
 
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName + ".txt");
-
-
-            if (File.Exists(filePath))
-            {
-                SaveFileName.Text = "File already exists";
-                SaveFileName.Enabled = false;
-                await Delay();
-
-                SaveFileName.Enabled = true;
-                SaveFileName.Text = "File name";
-                return;
-
-            }
-
-            else {
-                try
-                {
-                    string settingsData =
-                    currentVolAngle.ToString() + Environment.NewLine +
-                    currentDistAngle.ToString() + Environment.NewLine +
-                    currentGainAngle.ToString();
-
-                    // Exempel på att skapa filen:
-                    File.WriteAllText(filePath, settingsData);
-                    SaveFileName.Text = $"File '{fileName}' created successfully!";
-                    SaveFileName.Enabled = false;
-                    await Delay();
-
-                    SaveFileName.Enabled = true;
-                    SaveFileName.Text = "File Name";
-                }
-                catch (Exception ex)
-                {
-                    // Hantera fel som kan uppstå vid skrivning (t.ex. behörighetsproblem)
-                    SaveFileName.Text = "Error creating file.";
-                    MessageBox.Show($"Error: {ex.Message}");
-                    await Delay();
-                }
-            }
+            presetmanager.Save(fileName, currentVolAngle, currentGainAngle, currentDistAngle);
         }
 
-        public bool ApplyLoadedSettings(string filePath)
+        public bool ApplyLoadedSettings(float[] settings)
         {
-            if (!File.Exists(filePath))
-            {
-                return false;
-            }
 
             try
             {
-                MessageBox.Show(filePath);
-                string[] lines = File.ReadAllLines(filePath);
+                
+                 // Uppdatera dina globala variabler
+                 currentVolAngle = settings[0];
+                 currentDistAngle = settings[1];
+                 currentGainAngle = settings[2];
 
-                if (lines.Length >= 3)
-                {
-                    if (float.TryParse(lines[0], out float volAngle) &&
-                        float.TryParse(lines[1], out float distAngle) &&
-                        float.TryParse(lines[2], out float gainAngle))
-                    {
-                        // Uppdatera dina globala variabler
-                        currentVolAngle = volAngle;
-                        currentDistAngle = distAngle;
-                        currentGainAngle = gainAngle;
+                 // Tvinga PictureBox-kontrollerna att rita om sig med de nya vinklarna
+                 KnobVol.Invalidate();
+                 KnobDist.Invalidate();
+                 KnobGain.Invalidate();
 
-                        // Tvinga PictureBox-kontrollerna att rita om sig med de nya vinklarna
-                        KnobVol.Invalidate();
-                        KnobDist.Invalidate();
-                        KnobGain.Invalidate();
+                 textVol.Text = ((currentVolAngle / 2.6) + 50).ToString();
+                 textGain.Text = ((currentGainAngle / 2.6) + 50).ToString();
+                 textDist.Text = ((currentDistAngle / 2.6) + 50).ToString();
 
-                        textVol.Text = ((currentVolAngle / 2.6) + 50).ToString();
-                        textGain.Text = ((currentGainAngle / 2.6) + 50).ToString();
-                        textDist.Text = ((currentDistAngle / 2.6) + 50).ToString();
-
-                        return true;
-                    }
-                }
+                 return true;
+                    
+                
             }
             catch (Exception)
             {

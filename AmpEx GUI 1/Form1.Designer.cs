@@ -142,7 +142,7 @@
             this.SaveEnter.Text = "Enter";
             this.SaveEnter.UseVisualStyleBackColor = true;
             this.SaveEnter.Visible = false;
-            this.SaveEnter.Click += new System.EventHandler(this.button1_Click);
+            this.SaveEnter.Click += new System.EventHandler(this.SaveEnter_Click);
             // 
             // SaveFileName
             // 
@@ -185,7 +185,7 @@
             this.Controls.Add(this.KnobGain);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = " ";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.KnobVol)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KnobGain)).EndInit();

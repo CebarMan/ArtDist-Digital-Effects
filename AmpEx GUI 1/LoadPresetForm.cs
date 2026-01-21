@@ -16,7 +16,7 @@ namespace AmpEx_GUI_1
         private Form1 _mainForm;
         private readonly string _saveDirectory = AppDomain.CurrentDomain.BaseDirectory;
         public delegate void ClickButton();
-        public event ClickButton ButtonWasClicked;
+        PresetManager presetManager = new PresetManager();
         public LoadPresetForm(Form1 mainForm)
         {
             InitializeComponent();
@@ -70,26 +70,7 @@ namespace AmpEx_GUI_1
             {
                 //Hämta det valda filnamnet
                 string fileName = PresetsListBox.SelectedItem.ToString();
-
-                //Skapa den fullständiga sökvägen (använder _saveDirectory [1])
-                string filePath = Path.Combine(_saveDirectory, fileName + ".txt");
-
-                //Anropa ApplyLoadedSettings på huvudformen [2]
-                if (_mainForm != null)
-                {
-                    bool success = _mainForm.ApplyLoadedSettings(filePath);
-
-                    if (success)
-                    {
-                        //Inställningarna laddades och applicerades, stäng formuläret
-                        this.Close();
-                    }
-                    else
-                    {
-                        //Felhantering om laddningen misslyckades inuti ApplyLoadedSettings
-                        InfoLabel.Text = "Kunde inte ladda preset (se felmeddelande).";
-                    }
-                }
+                _mainForm.ApplyLoadedSettings(presetManager.Load(fileName));
             }
             else
             {
