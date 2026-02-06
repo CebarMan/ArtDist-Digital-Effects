@@ -27,28 +27,26 @@ namespace AmpEx_GUI_1
         private float currentDistAngle = -130.0f;
         private float currentGainAngle = -130.0f;
 
-        private IWavePlayer WaveOut;
-        private AudioFileReader audiofilereader;
         private int pizza = 0;
         PresetManager presetmanager = new PresetManager();
+        AudioEngine audioEngine = new AudioEngine();
+
+        private readonly string _saveDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
 
         public Form1()
         {
             InitializeComponent();
+            LoadAudioFiles();
 
-            string AudioFile = "Crash-Cymbal-1.wav";
 
             KnobDist.BackColor = System.Drawing.Color.Transparent;
             KnobGain.BackColor = System.Drawing.Color.Transparent;
             KnobVol.BackColor = System.Drawing.Color.Transparent; 
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
-            audiofilereader = new AudioFileReader(AudioFile);
+            LabelInfo.Text = "Welcome to AmpEx!";
 
-            WaveOut = new WaveOutEvent();
-            WaveOut.Init(audiofilereader);
-            WaveOut.Play();
         }
 
         private void Generic_Knob_Paint(object sender, PaintEventArgs e)
@@ -139,12 +137,6 @@ namespace AmpEx_GUI_1
                 else if (knobControl == KnobDist) startAngle = currentDistAngle;
                 else if (knobControl == KnobGain) startAngle = currentGainAngle;
 
-                pizza += 1;
-                if (pizza == 5)
-                {
-                    WaveOut.Play();
-                    pizza = 0;
-                }
             }
 
 
@@ -237,7 +229,7 @@ namespace AmpEx_GUI_1
             }
             catch (Exception)
             {
-                MessageBox.Show("Kunde inte ladda preset");
+                MessageBox.Show("Could not load preset");
             }
             return false;
         }
@@ -258,6 +250,62 @@ namespace AmpEx_GUI_1
             // Skapa en instans av laddningsformuläret och skicka med en referens till huvudformen (this).
             LoadPresetForm loadForm = new LoadPresetForm(this);
             loadForm.ShowDialog();
+        }
+
+        private void checkedListBox1_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void LoadAudioFiles()
+        {
+            AudioFilesBox.Items.Clear();
+
+            LabelInfo.Text = string.Empty;
+
+            if (!Directory.Exists(_saveDirectory))
+            {
+                MessageBox.Show("Save list was not found", "Error");
+                return;
+            }
+            try
+            {
+                string[] filePaths = Directory.GetFiles(_saveDirectory, "*.wav");
+
+                foreach (string filePath in filePaths)
+                {
+                    string fileName = Path.GetFileNameWithoutExtension(filePath);
+
+                    // Lägg till i listan
+                    AudioFilesBox.Items.Add(fileName);
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not read files: {ex.Message}", "File error");
+            }
+
+        }
+
+        private void AudioFilesBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private async void PlayAudio_Click(object sender, EventArgs e)
+        {
+            if (AudioFilesBox.SelectedItem != null)
+            {
+                string AudioFile = AudioFilesBox.SelectedItem.ToString();
+                audioEngine.play(AudioFile);
+            }
+            else
+            {
+                LabelInfo.Text = "Nothing selected";
+                await Delay();
+                LabelInfo.Text = "Welcome to AmpEx!";
+            }
+
         }
     }
 }

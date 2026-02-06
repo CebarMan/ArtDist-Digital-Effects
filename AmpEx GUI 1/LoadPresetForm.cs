@@ -37,7 +37,7 @@ namespace AmpEx_GUI_1
             InfoLabel.Text = string.Empty;
 
             if (!Directory.Exists(_saveDirectory)) {
-                MessageBox.Show("Sparkatalogen hittades inte", "Fel");
+                MessageBox.Show("Save list was not found", "Error");
                 return;
             }
             try
@@ -54,7 +54,7 @@ namespace AmpEx_GUI_1
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Kunde inte läsa filer från mappen: {ex.Message}", "Filfel");
+                MessageBox.Show($"Could not read files: {ex.Message}", "File error");
             }
 
         }
@@ -71,13 +71,39 @@ namespace AmpEx_GUI_1
                 //Hämta det valda filnamnet
                 string fileName = PresetsListBox.SelectedItem.ToString();
                 _mainForm.ApplyLoadedSettings(presetManager.Load(fileName));
+                this.Close();
             }
             else
             {
                 InfoLabel.Text = "Nothing selected";
+                Delay(1000);
+                InfoLabel.Text = string.Empty;
+
             }
         }
 
+        private void btnDelete_Click(object sender, EventArgs e)
+        {
+            if (PresetsListBox.SelectedItem != null)
+            {
+                string selectedFileName = PresetsListBox.SelectedItem.ToString();
+
+             
+                presetManager.Delete(selectedFileName);
+
+                
+                LoadPresetFiles();
+            }
+            else
+            {
+                MessageBox.Show("Please choose a file to delete.");
+            }
+        }
+
+        private void Delay(int TimeMs)
+        {
+            System.Threading.Thread.Sleep(TimeMs);
+        }
 
 
     }

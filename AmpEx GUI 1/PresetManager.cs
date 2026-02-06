@@ -53,7 +53,7 @@ namespace AmpEx_GUI_1
             // 1. Kolla om filen finns INNAN vi försöker läsa den
             if (!File.Exists(filePath))
             {
-                MessageBox.Show("Filen hittades inte: " + filePath);
+                MessageBox.Show("File was not found: " + filePath);
                 return null;
             }
 
@@ -75,19 +75,38 @@ namespace AmpEx_GUI_1
                     }
                 }
 
-                MessageBox.Show("Filen har fel format eller saknar data.");
+                MessageBox.Show("File has wrong format or is missing data.");
                 return null;
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Tekniskt fel vid laddning: {ex.Message}");
+                MessageBox.Show($"Couldn't load: {ex.Message}");
                 return null;
             }
         }
 
-        public void Delete(string fileName) 
-        { 
-        
+        public void Delete(string fileName)
+        {
+            // Vi skapar sökvägen på samma sätt som i AudioFileReader-exemplen i källorna [4, 5]
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName + ".txt");
+
+            try
+            {
+                // Vi kontrollerar om filen existerar innan vi försöker radera den
+                if (System.IO.File.Exists(filePath))
+                {
+                    System.IO.File.Delete(filePath);
+                    System.Windows.Forms.MessageBox.Show("Preset " + fileName + " Was deleted.");
+                }
+                else
+                {
+                    System.Windows.Forms.MessageBox.Show("File was not found.");
+                }
+            }
+            catch (System.Exception ex)
+            {
+                System.Windows.Forms.MessageBox.Show("An error occurred while deleting: " + ex.Message);
+            }
         }
 
 

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.KnobVol = new System.Windows.Forms.PictureBox();
             this.KnobGain = new System.Windows.Forms.PictureBox();
             this.KnobDist = new System.Windows.Forms.PictureBox();
             this.textGain = new System.Windows.Forms.TextBox();
@@ -38,28 +37,14 @@
             this.SaveEnter = new System.Windows.Forms.Button();
             this.SaveFileName = new System.Windows.Forms.TextBox();
             this.LoadPresetFormButton = new System.Windows.Forms.Button();
-            ((System.ComponentModel.ISupportInitialize)(this.KnobVol)).BeginInit();
+            this.AudioFilesBox = new System.Windows.Forms.ListBox();
+            this.LabelInfo = new System.Windows.Forms.Label();
+            this.KnobVol = new System.Windows.Forms.PictureBox();
+            this.PlayAudio = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.KnobGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KnobDist)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KnobVol)).BeginInit();
             this.SuspendLayout();
-            // 
-            // KnobVol
-            // 
-            this.KnobVol.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.KnobVol.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
-            this.KnobVol.Location = new System.Drawing.Point(121, 183);
-            this.KnobVol.Name = "KnobVol";
-            this.KnobVol.Size = new System.Drawing.Size(72, 72);
-            this.KnobVol.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.KnobVol.TabIndex = 1;
-            this.KnobVol.TabStop = false;
-            this.KnobVol.Paint += new System.Windows.Forms.PaintEventHandler(this.Generic_Knob_Paint);
-            this.KnobVol.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
-            this.KnobVol.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
-            this.KnobVol.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseMoving);
-            this.KnobVol.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
             // 
             // KnobGain
             // 
@@ -67,9 +52,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.KnobGain.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
-            this.KnobGain.Location = new System.Drawing.Point(307, 183);
+            this.KnobGain.Location = new System.Drawing.Point(324, 183);
             this.KnobGain.Name = "KnobGain";
-            this.KnobGain.Size = new System.Drawing.Size(80, 80);
+            this.KnobGain.Size = new System.Drawing.Size(100, 95);
             this.KnobGain.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.KnobGain.TabIndex = 2;
             this.KnobGain.TabStop = false;
@@ -84,9 +69,9 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.KnobDist.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
-            this.KnobDist.Location = new System.Drawing.Point(514, 156);
+            this.KnobDist.Location = new System.Drawing.Point(559, 172);
             this.KnobDist.Name = "KnobDist";
-            this.KnobDist.Size = new System.Drawing.Size(90, 90);
+            this.KnobDist.Size = new System.Drawing.Size(100, 106);
             this.KnobDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.KnobDist.TabIndex = 3;
             this.KnobDist.TabStop = false;
@@ -110,7 +95,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textDist.Location = new System.Drawing.Point(514, 88);
             this.textDist.Name = "textDist";
-            this.textDist.Size = new System.Drawing.Size(100, 20);
+            this.textDist.Size = new System.Drawing.Size(156, 20);
             this.textDist.TabIndex = 5;
             this.textDist.TextChanged += new System.EventHandler(this.textDist_TextChanged);
             // 
@@ -166,13 +151,62 @@
             this.LoadPresetFormButton.UseVisualStyleBackColor = true;
             this.LoadPresetFormButton.Click += new System.EventHandler(this.LoadPresetFormButton_Click);
             // 
+            // AudioFilesBox
+            // 
+            this.AudioFilesBox.FormattingEnabled = true;
+            this.AudioFilesBox.Location = new System.Drawing.Point(5, 151);
+            this.AudioFilesBox.Name = "AudioFilesBox";
+            this.AudioFilesBox.Size = new System.Drawing.Size(97, 264);
+            this.AudioFilesBox.TabIndex = 11;
+            this.AudioFilesBox.SelectedIndexChanged += new System.EventHandler(this.AudioFilesBox_SelectedIndexChanged);
+            // 
+            // LabelInfo
+            // 
+            this.LabelInfo.AutoSize = true;
+            this.LabelInfo.Location = new System.Drawing.Point(2, 135);
+            this.LabelInfo.Name = "LabelInfo";
+            this.LabelInfo.Size = new System.Drawing.Size(35, 13);
+            this.LabelInfo.TabIndex = 12;
+            this.LabelInfo.Text = "label1";
+            // 
+            // KnobVol
+            // 
+            this.KnobVol.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.KnobVol.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
+            this.KnobVol.Location = new System.Drawing.Point(121, 183);
+            this.KnobVol.Name = "KnobVol";
+            this.KnobVol.Size = new System.Drawing.Size(87, 95);
+            this.KnobVol.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.KnobVol.TabIndex = 1;
+            this.KnobVol.TabStop = false;
+            this.KnobVol.Paint += new System.Windows.Forms.PaintEventHandler(this.Generic_Knob_Paint);
+            this.KnobVol.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
+            this.KnobVol.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
+            this.KnobVol.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseMoving);
+            this.KnobVol.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            // 
+            // PlayAudio
+            // 
+            this.PlayAudio.Location = new System.Drawing.Point(5, 421);
+            this.PlayAudio.Name = "PlayAudio";
+            this.PlayAudio.Size = new System.Drawing.Size(75, 23);
+            this.PlayAudio.TabIndex = 13;
+            this.PlayAudio.Text = "Play Audio";
+            this.PlayAudio.UseVisualStyleBackColor = true;
+            this.PlayAudio.Click += new System.EventHandler(this.PlayAudio_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackgroundImage = global::AmpEx_GUI_1.Properties.Resources.amp;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.ClientSize = new System.Drawing.Size(719, 424);
+            this.ClientSize = new System.Drawing.Size(775, 463);
+            this.Controls.Add(this.PlayAudio);
+            this.Controls.Add(this.LabelInfo);
+            this.Controls.Add(this.AudioFilesBox);
             this.Controls.Add(this.LoadPresetFormButton);
             this.Controls.Add(this.SaveFileName);
             this.Controls.Add(this.SaveEnter);
@@ -187,16 +221,15 @@
             this.Name = "Form1";
             this.Text = " ";
             this.Load += new System.EventHandler(this.Form1_Load);
-            ((System.ComponentModel.ISupportInitialize)(this.KnobVol)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KnobGain)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.KnobDist)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.KnobVol)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.PictureBox KnobVol;
         private System.Windows.Forms.PictureBox KnobGain;
         private System.Windows.Forms.PictureBox KnobDist;
         private System.Windows.Forms.TextBox textGain;
@@ -206,6 +239,10 @@
         private System.Windows.Forms.Button SaveEnter;
         private System.Windows.Forms.TextBox SaveFileName;
         private System.Windows.Forms.Button LoadPresetFormButton;
+        private System.Windows.Forms.ListBox AudioFilesBox;
+        private System.Windows.Forms.Label LabelInfo;
+        private System.Windows.Forms.PictureBox KnobVol;
+        private System.Windows.Forms.Button PlayAudio;
     }
 }
 

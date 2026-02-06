@@ -31,6 +31,7 @@
             this.LoadButton = new System.Windows.Forms.Button();
             this.PresetsListBox = new System.Windows.Forms.ListBox();
             this.InfoLabel = new System.Windows.Forms.Label();
+            this.btnDelete = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // LoadButton
@@ -61,11 +62,22 @@
             this.InfoLabel.TabIndex = 3;
             this.InfoLabel.Text = "AAAAAAAAAAA";
             // 
+            // btnDelete
+            // 
+            this.btnDelete.Location = new System.Drawing.Point(207, 415);
+            this.btnDelete.Name = "btnDelete";
+            this.btnDelete.Size = new System.Drawing.Size(75, 23);
+            this.btnDelete.TabIndex = 4;
+            this.btnDelete.Text = "Delete";
+            this.btnDelete.UseVisualStyleBackColor = true;
+            this.btnDelete.Click += new System.EventHandler(this.btnDelete_Click);
+            // 
             // LoadPresetForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(252, 446);
+            this.ClientSize = new System.Drawing.Size(300, 446);
+            this.Controls.Add(this.btnDelete);
             this.Controls.Add(this.InfoLabel);
             this.Controls.Add(this.PresetsListBox);
             this.Controls.Add(this.LoadButton);
@@ -82,5 +94,6 @@
         private System.Windows.Forms.Button LoadButton;
         private System.Windows.Forms.ListBox PresetsListBox;
         private System.Windows.Forms.Label InfoLabel;
+        private System.Windows.Forms.Button btnDelete;
     }
 }
