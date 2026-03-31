@@ -42,7 +42,7 @@ namespace ArtDist_GUI
             KnobDist.BackColor = System.Drawing.Color.Transparent;
             KnobGain.BackColor = System.Drawing.Color.Transparent;
             KnobVol.BackColor = System.Drawing.Color.Transparent;
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);7
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
             AudioFilesBox.AllowDrop = true;
             AudioFilesBox.DragEnter += AudioFilesBox_DragEnter;
