@@ -1,4 +1,4 @@
-﻿namespace AmpEx_GUI_1
+﻿namespace ArtDist_GUI
 {
     partial class Form1
     {
@@ -51,7 +51,7 @@
             this.KnobGain.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.KnobGain.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
+            this.KnobGain.Image = global::ArtDist_GUI.Properties.Resources.knob1;
             this.KnobGain.Location = new System.Drawing.Point(324, 183);
             this.KnobGain.Name = "KnobGain";
             this.KnobGain.Size = new System.Drawing.Size(100, 95);
@@ -68,7 +68,7 @@
             this.KnobDist.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.KnobDist.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
+            this.KnobDist.Image = global::ArtDist_GUI.Properties.Resources.knob1;
             this.KnobDist.Location = new System.Drawing.Point(559, 172);
             this.KnobDist.Name = "KnobDist";
             this.KnobDist.Size = new System.Drawing.Size(100, 106);
@@ -174,7 +174,7 @@
             this.KnobVol.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.KnobVol.Image = global::AmpEx_GUI_1.Properties.Resources.knob1;
+            this.KnobVol.Image = global::ArtDist_GUI.Properties.Resources.knob1;
             this.KnobVol.Location = new System.Drawing.Point(121, 183);
             this.KnobVol.Name = "KnobVol";
             this.KnobVol.Size = new System.Drawing.Size(87, 95);
@@ -201,7 +201,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackgroundImage = global::AmpEx_GUI_1.Properties.Resources.amp;
+            this.BackgroundImage = global::ArtDist_GUI.Properties.Resources.amp;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(775, 463);
             this.Controls.Add(this.PlayAudio);

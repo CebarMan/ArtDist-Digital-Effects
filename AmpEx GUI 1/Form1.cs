@@ -13,7 +13,7 @@ using System.Windows.Forms;
 using System.Globalization;
 using NAudio.Wave;
 
-namespace AmpEx_GUI_1
+namespace ArtDist_GUI
 {
     public partial class Form1 : Form
     {
@@ -30,6 +30,7 @@ namespace AmpEx_GUI_1
         private int pizza = 0;
         PresetManager presetmanager = new PresetManager();
         AudioEngine audioEngine = new AudioEngine();
+        private GainSampleProvider gainProvider;
 
         private readonly string _saveDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -38,15 +39,16 @@ namespace AmpEx_GUI_1
         {
             InitializeComponent();
             LoadAudioFiles();
-
-
             KnobDist.BackColor = System.Drawing.Color.Transparent;
             KnobGain.BackColor = System.Drawing.Color.Transparent;
-            KnobVol.BackColor = System.Drawing.Color.Transparent; 
-            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
+            KnobVol.BackColor = System.Drawing.Color.Transparent;
+            this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);7
 
-            LabelInfo.Text = "Welcome to AmpEx!";
+            AudioFilesBox.AllowDrop = true;
+            AudioFilesBox.DragEnter += AudioFilesBox_DragEnter;
+            AudioFilesBox.DragDrop += AudioFilesBox_DragDrop;
 
+            LabelInfo.Text = "Welcome to ArtDist!";
         }
 
         private void Generic_Knob_Paint(object sender, PaintEventArgs e)
@@ -99,24 +101,54 @@ namespace AmpEx_GUI_1
             if (knobControl == KnobVol)
             {
                 currentVolAngle = newAngle;
-                // Här översätter du currentVolAngle till det faktiska volymvärdet (0-100)
-                // float volumeValue = (newAngle / MaxAngle) * 100f; 
-                
+
+                // 1. Skapa ett värde mellan 0.0 och 1.0 baserat på rattens vinkel
+                // (-130 grader blir 0.0, +130 grader blir 1.0)
+                float volumeValue = (newAngle + 130f) / 260f;
+
+                // 2. Skicka värdet till vår nya metod i ljudmotorn!
+                audioEngine.SetVolume(volumeValue);
+
+                // Uppdatera texten så den visar 0 - 100%
                 textVol.Text = ((newAngle / 2.6) + 50).ToString();
-
-
             }
             else if (knobControl == KnobDist)
             {
                 currentDistAngle = newAngle;
-                // Lägg till din distorsionslogik här
-                textDist.Text = ((newAngle / 2.6) + 50).ToString();
+
+                // 1. Skapa ett normaliserat värde mellan 0.0 och 1.0
+                float normalizedValue = (newAngle + 130f) / 260f;
+
+                // 2. Skapa en "Drive". 
+                // Vi börjar på 1.0 (inget dist) och går upp till t.ex. 20.0 (väldigt mycket dist).
+                float driveValue = 1.0f + (normalizedValue * 49.0f);
+
+                // 3. Skicka till ljudmotorn
+                if (audioEngine.CurrentDistortionProvider != null)
+                {
+                    audioEngine.CurrentDistortionProvider.DriveFactor = driveValue;
+                }
+
+                textDist.Text = ((newAngle / 2.6) + 50).ToString("0");
             }
             else if (knobControl == KnobGain)
             {
                 currentGainAngle = newAngle;
-                // Lägg till din gain-logik här
-                textGain.Text = ((newAngle/2.6)+50).ToString();
+
+                // 1. Skapa ett basvärde mellan 0.0 och 1.0
+                float normalizedValue = (newAngle + 130f) / 260f;
+
+                // 2. Multiplicera med 4 för att skapa äkta "Amp Gain".
+                // Nu går ratten från 0.0 (tyst) till 4.0 (extremt högt/distspräck!)
+                // Testa att ändra 4.0f till en egen siffra för att hitta rätt känsla.
+                float gainValue = normalizedValue * 4.0f;
+
+                if (audioEngine.CurrentGainProvider != null)
+                {
+                    audioEngine.CurrentGainProvider.GainFactor = gainValue;
+                }
+
+                textGain.Text = ((newAngle / 2.6) + 50).ToString();
             }
 
             knobControl.Invalidate();
@@ -298,6 +330,30 @@ namespace AmpEx_GUI_1
             {
                 string AudioFile = AudioFilesBox.SelectedItem.ToString();
                 audioEngine.play(AudioFile);
+
+                // NYTT: Tvinga ljudmotorn att hämta de aktuella värdena från rattarna direkt när ljudet startar!
+
+                // Räkna ut volymen baserat på rattens nuvarande position
+                float currentVol = (currentVolAngle + 130f) / 260f;
+                audioEngine.SetVolume(currentVol);
+
+
+
+                // Räkna ut gain baserat på rattens nuvarande position
+                float currentGain = ((currentGainAngle + 130f) / 260f) * 4.0f;
+
+                float currentDist = ((currentDistAngle + 130f) / 260f) * 49.0f;
+
+
+                if (audioEngine.CurrentGainProvider != null)
+                {
+                    audioEngine.CurrentGainProvider.GainFactor = currentGain;
+                }
+
+                if (audioEngine.CurrentDistortionProvider != null)
+                {
+                    audioEngine.CurrentDistortionProvider.DriveFactor = currentDist;
+                }
             }
             else
             {
@@ -305,7 +361,6 @@ namespace AmpEx_GUI_1
                 await Delay();
                 LabelInfo.Text = "Welcome to AmpEx!";
             }
-
         }
     }
 }

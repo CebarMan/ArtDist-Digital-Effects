@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AmpEx_GUI_1
+namespace ArtDist_GUI
 {
     internal class PresetManager
     {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace AmpEx_GUI_1
+namespace ArtDist_GUI
 {
     internal static class Program
     {

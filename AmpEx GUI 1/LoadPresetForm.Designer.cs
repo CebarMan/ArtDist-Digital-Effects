@@ -1,4 +1,4 @@
-﻿namespace AmpEx_GUI_1
+﻿namespace ArtDist_GUI
 {
     partial class LoadPresetForm
     {

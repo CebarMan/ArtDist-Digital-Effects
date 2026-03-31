@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
-namespace AmpEx_GUI_1
+namespace ArtDist_GUI
 {
     public partial class LoadPresetForm : Form
     {
