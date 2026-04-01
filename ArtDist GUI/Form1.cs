@@ -27,10 +27,10 @@ namespace ArtDist_GUI
         private float currentDistAngle = -130.0f;
         private float currentGainAngle = -130.0f;
 
-        private int pizza = 0;
+        
         PresetManager presetmanager = new PresetManager();
         AudioEngine audioEngine = new AudioEngine();
-        private GainSampleProvider gainProvider;
+        
 
         private readonly string _saveDirectory = AppDomain.CurrentDomain.BaseDirectory;
 
@@ -45,8 +45,6 @@ namespace ArtDist_GUI
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
             AudioFilesBox.AllowDrop = true;
-            AudioFilesBox.DragEnter += AudioFilesBox_DragEnter;
-            AudioFilesBox.DragDrop += AudioFilesBox_DragDrop;
 
             LabelInfo.Text = "Welcome to ArtDist!";
         }
@@ -293,7 +291,7 @@ namespace ArtDist_GUI
         {
             AudioFilesBox.Items.Clear();
 
-            LabelInfo.Text = string.Empty;
+            LabelInfo.Text = "Welcome to ArtDist!";
 
             if (!Directory.Exists(_saveDirectory))
             {
@@ -361,6 +359,11 @@ namespace ArtDist_GUI
                 await Delay();
                 LabelInfo.Text = "Welcome to AmpEx!";
             }
+        }
+
+        private void RefreshButton_Click(object sender, EventArgs e)
+        {
+            LoadAudioFiles();
         }
     }
 }

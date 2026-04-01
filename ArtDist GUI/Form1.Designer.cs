@@ -41,6 +41,7 @@
             this.LabelInfo = new System.Windows.Forms.Label();
             this.KnobVol = new System.Windows.Forms.PictureBox();
             this.PlayAudio = new System.Windows.Forms.Button();
+            this.RefreshButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.KnobGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KnobDist)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.KnobVol)).BeginInit();
@@ -197,6 +198,16 @@
             this.PlayAudio.UseVisualStyleBackColor = true;
             this.PlayAudio.Click += new System.EventHandler(this.PlayAudio_Click);
             // 
+            // RefreshButton
+            // 
+            this.RefreshButton.Location = new System.Drawing.Point(86, 421);
+            this.RefreshButton.Name = "RefreshButton";
+            this.RefreshButton.Size = new System.Drawing.Size(75, 23);
+            this.RefreshButton.TabIndex = 14;
+            this.RefreshButton.Text = "Refresh";
+            this.RefreshButton.UseVisualStyleBackColor = true;
+            this.RefreshButton.Click += new System.EventHandler(this.RefreshButton_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -204,6 +215,7 @@
             this.BackgroundImage = global::ArtDist_GUI.Properties.Resources.amp;
             this.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.ClientSize = new System.Drawing.Size(775, 463);
+            this.Controls.Add(this.RefreshButton);
             this.Controls.Add(this.PlayAudio);
             this.Controls.Add(this.LabelInfo);
             this.Controls.Add(this.AudioFilesBox);
@@ -243,6 +255,7 @@
         private System.Windows.Forms.Label LabelInfo;
         private System.Windows.Forms.PictureBox KnobVol;
         private System.Windows.Forms.Button PlayAudio;
+        private System.Windows.Forms.Button RefreshButton;
     }
 }
 
