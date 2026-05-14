@@ -12,7 +12,7 @@ namespace ArtDist_GUI
         private readonly ISampleProvider source;
         public float GainFactor { get; set; } = 1.0f;
 
-        // Den här måste ha ett värde för att .Init() ska fungera!
+        // Den här måste ha ett värde för att .Init() ska fungera
         public WaveFormat WaveFormat
         {
             get { return source.WaveFormat; }
@@ -27,19 +27,16 @@ namespace ArtDist_GUI
         {
             int samplesRead = source.Read(buffer, offset, count);
 
-            // 1. Loopa igenom ljudet
+            // Loopa igenom ljudet
             for (int n = 0; n < samplesRead; n++)
             {
                 // Multiplicera med Gain-ratten
                 buffer[offset + n] *= GainFactor;
             }
 
-            // 2. CENTRERA LJUDET (Lösningen på höger/vänster-problemet!)
-            // Om ljudet är i stereo (2 kanaler), tvinga höger kanal att spela samma sak som vänster
+            // Om ljudet är i stereo, tvinga höger kanal att spela samma sak som vänster
             if (WaveFormat.Channels == 2)
             {
-                // I stereo ligger ljudet i arrayen som [Vänster, Höger, Vänster, Höger...]
-                // Vi hoppar fram 2 steg i taget (n += 2)
                 for (int n = 0; n < samplesRead; n += 2)
                 {
                     float leftChannel = buffer[offset + n];

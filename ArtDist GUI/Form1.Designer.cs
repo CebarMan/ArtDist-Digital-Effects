@@ -62,7 +62,7 @@
             this.KnobGain.Paint += new System.Windows.Forms.PaintEventHandler(this.Generic_Knob_Paint);
             this.KnobGain.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
             this.KnobGain.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseMoving);
-            this.KnobGain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            this.KnobGain.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picturebox_MouseUp);
             // 
             // KnobDist
             // 
@@ -70,16 +70,16 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.KnobDist.Image = global::ArtDist_GUI.Properties.Resources.knob1;
-            this.KnobDist.Location = new System.Drawing.Point(559, 172);
+            this.KnobDist.Location = new System.Drawing.Point(550, 172);
             this.KnobDist.Name = "KnobDist";
-            this.KnobDist.Size = new System.Drawing.Size(100, 106);
+            this.KnobDist.Size = new System.Drawing.Size(107, 106);
             this.KnobDist.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.KnobDist.TabIndex = 3;
             this.KnobDist.TabStop = false;
             this.KnobDist.Paint += new System.Windows.Forms.PaintEventHandler(this.Generic_Knob_Paint);
             this.KnobDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
             this.KnobDist.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseMoving);
-            this.KnobDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            this.KnobDist.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picturebox_MouseUp);
             // 
             // textGain
             // 
@@ -133,13 +133,14 @@
             // SaveFileName
             // 
             this.SaveFileName.Location = new System.Drawing.Point(121, 51);
-            this.SaveFileName.MaxLength = 100000;
+            this.SaveFileName.MaxLength = 50;
             this.SaveFileName.Name = "SaveFileName";
             this.SaveFileName.Size = new System.Drawing.Size(128, 20);
             this.SaveFileName.TabIndex = 9;
             this.SaveFileName.Text = "File name";
             this.SaveFileName.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.SaveFileName.Visible = false;
+            this.SaveFileName.Click += new System.EventHandler(this.SaveFileName_click);
             this.SaveFileName.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // LoadPresetFormButton
@@ -154,12 +155,15 @@
             // 
             // AudioFilesBox
             // 
+            this.AudioFilesBox.AllowDrop = true;
             this.AudioFilesBox.FormattingEnabled = true;
             this.AudioFilesBox.Location = new System.Drawing.Point(5, 151);
             this.AudioFilesBox.Name = "AudioFilesBox";
             this.AudioFilesBox.Size = new System.Drawing.Size(97, 264);
             this.AudioFilesBox.TabIndex = 11;
             this.AudioFilesBox.SelectedIndexChanged += new System.EventHandler(this.AudioFilesBox_SelectedIndexChanged);
+            this.AudioFilesBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.AudioFilesBox_DragDrop);
+            this.AudioFilesBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.AudioFilesBox_DragEnter);
             // 
             // LabelInfo
             // 
@@ -186,7 +190,7 @@
             this.KnobVol.MouseClick += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
             this.KnobVol.MouseDown += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseDown);
             this.KnobVol.MouseMove += new System.Windows.Forms.MouseEventHandler(this.picturebox_mouseMoving);
-            this.KnobVol.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_MouseUp);
+            this.KnobVol.MouseUp += new System.Windows.Forms.MouseEventHandler(this.picturebox_MouseUp);
             // 
             // PlayAudio
             // 

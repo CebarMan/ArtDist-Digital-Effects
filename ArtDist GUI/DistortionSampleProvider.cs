@@ -10,13 +10,14 @@ namespace ArtDist_GUI
 {
     internal class DistortionSampleProvider : ISampleProvider
     {
+        // Tar ljudet från GainSampleProvider och applicerar en distorsionseffekt
         private readonly ISampleProvider source;
 
-        // DriveFactor bestämmer hur hårt vi pressar ljudet genom dist-funktionen. 
-        // 1.0 = rent ljud, högre värden = mer distorsion.
+        // Bestämmer hur hårt ljudet pressas genom dist-funktionen
+        // 1.0 = rent ljud, högre värden = mer distorsion
         public float DriveFactor { get; set; } = 1.0f;
 
-        // Berätta vilket format vi har (ärvs från källan)
+        // Berättar vilket filformat 
         public WaveFormat WaveFormat { get { return source.WaveFormat; } }
 
         public DistortionSampleProvider(ISampleProvider source)
@@ -33,9 +34,9 @@ namespace ArtDist_GUI
             {
                 float sample = buffer[offset + n];
 
-                // Applicera Soft Clipping (Rör-förstärkarsimulering)
-                // Math.Tanh håller automatiskt värdet mellan -1.0 och +1.0, 
-                // men pressar ihop (komprimerar och distar) ljudet ju högre DriveFactor är.
+                // Lägger till Soft Clipping (Rör-förstärkarsimulering)
+                // Math.Tanh håller automatiskt värdet mellan -1.0 och +1.0
+                // komprimerar och distar ljudet ju högre DriveFactor är
                 sample = (float)Math.Tanh(sample * DriveFactor);
 
                 buffer[offset + n] = sample;

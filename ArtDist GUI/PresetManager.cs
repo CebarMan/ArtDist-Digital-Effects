@@ -14,7 +14,7 @@ namespace ArtDist_GUI
         public void Save(string fileName, float vol, float gain, float dist) 
         {
 
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName + ".txt");
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LayoutFiles", fileName + ".txt");
 
 
             if (File.Exists(filePath))
@@ -33,14 +33,13 @@ namespace ArtDist_GUI
                     dist + Environment.NewLine +
                     gain.ToString();
 
-                    // Exempel på att skapa filen:
+                    // Skapar filen
                     File.WriteAllText(filePath, settingsData);
 
-                    MessageBox.Show(filePath + " successfully created");
                 }
                 catch (Exception ex)
                 {
-                    // Hantera fel som kan uppstå vid skrivning (t.ex. behörighetsproblem)
+                    // Hantera fel som kan uppstå vid skrivning
                     MessageBox.Show($"Error: {ex.Message}");
                 }
             }
@@ -48,9 +47,9 @@ namespace ArtDist_GUI
 
         public float[] Load(string fileName)
         {
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName + ".txt");
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LayoutFiles", fileName + ".txt");
 
-            // 1. Kolla om filen finns INNAN vi försöker läsa den
+            // Kollar om filen finns
             if (!File.Exists(filePath))
             {
                 MessageBox.Show("File was not found: " + filePath);
@@ -59,18 +58,18 @@ namespace ArtDist_GUI
 
             try
             {
-                // 2. Läs alla rader till en array
+                // Läser alla rader till en array
                 string[] lines = File.ReadAllLines(filePath);
 
-                // 3. Kontrollera att vi har tillräckligt med rader [4]
+                // Kontrollerar att vi har tillräckligt med rader [4]
                 if (lines.Length >= 3)
                 {
-                    // 4. Konvertera varje specifik rad (index 0, 1, 2) [4]
+                    // Konverterar varje specifik rad (index 0, 1, 2) [4]
                     if (float.TryParse(lines[0], out float volAngle) &&
                         float.TryParse(lines[1], out float distAngle) &&
                         float.TryParse(lines[2], out float gainAngle))
                     {
-                        // SUCCESS: Skicka tillbaka värdena som en array
+                        // SUCCESS: Skickar tillbaka värdena som en array
                         return new float[] { volAngle, distAngle, gainAngle };
                     }
                 }
@@ -87,16 +86,15 @@ namespace ArtDist_GUI
 
         public void Delete(string fileName)
         {
-            // Vi skapar sökvägen på samma sätt som i AudioFileReader-exemplen i källorna [4, 5]
-            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, fileName + ".txt");
+            // Skapar sökvägen på samma sätt som i AudioFileReader-exemplen i källorna [4, 5]
+            string filePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LayoutFiles", fileName + ".txt");
 
             try
             {
-                // Vi kontrollerar om filen existerar innan vi försöker radera den
+                // Kontrollerar om filen existerar innan vi försöker radera den
                 if (System.IO.File.Exists(filePath))
                 {
                     System.IO.File.Delete(filePath);
-                    System.Windows.Forms.MessageBox.Show("Preset " + fileName + " Was deleted.");
                 }
                 else
                 {

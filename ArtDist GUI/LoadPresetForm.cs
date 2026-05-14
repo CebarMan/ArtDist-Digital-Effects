@@ -14,7 +14,7 @@ namespace ArtDist_GUI
     public partial class LoadPresetForm : Form
     {
         private Form1 _mainForm;
-        private readonly string _saveDirectory = AppDomain.CurrentDomain.BaseDirectory;
+        private readonly string _saveDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LayoutFiles");
         public delegate void ClickButton();
         PresetManager presetManager = new PresetManager();
         public LoadPresetForm(Form1 mainForm)

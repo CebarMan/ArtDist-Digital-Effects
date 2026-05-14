@@ -20,7 +20,7 @@ namespace ArtDist_GUI
         private bool isDragging = false;
         private int dragStartY;
         private float startAngle;
-        private readonly float MaxAngle = 130.0f; // Max rotation du tillåter (0 till 300 grader)
+        private readonly float MaxAngle = 130.0f; // Max rotation
 
         // Rotationstillstånd (Unikt för varje knapp)
         private float currentVolAngle = -130.0f;
@@ -30,9 +30,9 @@ namespace ArtDist_GUI
         
         PresetManager presetmanager = new PresetManager();
         AudioEngine audioEngine = new AudioEngine();
-        
 
-        private readonly string _saveDirectory = AppDomain.CurrentDomain.BaseDirectory;
+
+        private readonly string _saveDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioFiles");
 
 
         public Form1()
@@ -44,7 +44,8 @@ namespace ArtDist_GUI
             KnobVol.BackColor = System.Drawing.Color.Transparent;
             this.SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.UserPaint | ControlStyles.DoubleBuffer, true);
 
-            AudioFilesBox.AllowDrop = true;
+            AudioFilesBox.DragEnter += AudioFilesBox_DragEnter;
+            AudioFilesBox.DragDrop += AudioFilesBox_DragDrop;
 
             LabelInfo.Text = "Welcome to ArtDist!";
         }
@@ -55,7 +56,7 @@ namespace ArtDist_GUI
 
             if (knobControl == null || knobControl.Image == null) return;
 
-            // 1. Hämta RÄTT vinkel för denna kontroll
+            // Hämta RÄTT vinkel för denna kontroll
             float angleToUse;
             if (knobControl == KnobVol) angleToUse = currentVolAngle;
             else if (knobControl == KnobDist) angleToUse = currentDistAngle;
@@ -85,43 +86,43 @@ namespace ArtDist_GUI
         
         private void UpdateKnobSettings(PictureBox knobControl, int mouseY)
         {
-            // 1. Beräkna ny vinkel baserat på dragning
+            // Beräkna ny vinkel baserat på dragning
             int deltaY = dragStartY - mouseY;
             float sensitivity = 1f; // Justera för känslighet (1.5f = 1.5 grader per pixel)
             float newAngle = startAngle + (deltaY * sensitivity);
             
 
-            // 2. Begränsa vinkeln till det tillåtna intervallet (0 till MaxAngle)
+            // Begränsa vinkeln till det tillåtna intervallet (0 till MaxAngle)
             if (newAngle < -130) { newAngle = -130; }
             if (newAngle > MaxAngle) { newAngle = MaxAngle; }
 
-            // 3. Uppdatera RÄTT variabel och trigga omdragning
+            // Uppdatera RÄTT variabel och trigga omdragning
             if (knobControl == KnobVol)
             {
                 currentVolAngle = newAngle;
 
-                // 1. Skapa ett värde mellan 0.0 och 1.0 baserat på rattens vinkel
+                // Skapa ett värde mellan 0.0 och 1.0 baserat på rattens vinkel
                 // (-130 grader blir 0.0, +130 grader blir 1.0)
                 float volumeValue = (newAngle + 130f) / 260f;
 
-                // 2. Skicka värdet till vår nya metod i ljudmotorn!
+                // Skicka värdet till vår nya metod i ljudmotorn!
                 audioEngine.SetVolume(volumeValue);
 
                 // Uppdatera texten så den visar 0 - 100%
-                textVol.Text = ((newAngle / 2.6) + 50).ToString();
+                textVol.Text = ((newAngle / 2.6) + 50).ToString("0");
             }
             else if (knobControl == KnobDist)
             {
                 currentDistAngle = newAngle;
 
-                // 1. Skapa ett normaliserat värde mellan 0.0 och 1.0
+                // Skapa ett normaliserat värde mellan 0.0 och 1.0
                 float normalizedValue = (newAngle + 130f) / 260f;
 
-                // 2. Skapa en "Drive". 
+                // Skapa en "Drive". 
                 // Vi börjar på 1.0 (inget dist) och går upp till t.ex. 20.0 (väldigt mycket dist).
-                float driveValue = 1.0f + (normalizedValue * 49.0f);
+                float driveValue = 1.0f + (normalizedValue * 20.0f);
 
-                // 3. Skicka till ljudmotorn
+                // Skickar till ljudmotorn
                 if (audioEngine.CurrentDistortionProvider != null)
                 {
                     audioEngine.CurrentDistortionProvider.DriveFactor = driveValue;
@@ -133,12 +134,11 @@ namespace ArtDist_GUI
             {
                 currentGainAngle = newAngle;
 
-                // 1. Skapa ett basvärde mellan 0.0 och 1.0
+                // Skapa ett basvärde mellan 0.0 och 1.0
                 float normalizedValue = (newAngle + 130f) / 260f;
 
-                // 2. Multiplicera med 4 för att skapa äkta "Amp Gain".
-                // Nu går ratten från 0.0 (tyst) till 4.0 (extremt högt/distspräck!)
-                // Testa att ändra 4.0f till en egen siffra för att hitta rätt känsla.
+                // Multiplicera med 4 för att skapa äkta "Amp Gain".
+                // Ratten går från 0.0 (tyst) till 4.0 (extremt högt)
                 float gainValue = normalizedValue * 4.0f;
 
                 if (audioEngine.CurrentGainProvider != null)
@@ -146,7 +146,7 @@ namespace ArtDist_GUI
                     audioEngine.CurrentGainProvider.GainFactor = gainValue;
                 }
 
-                textGain.Text = ((newAngle / 2.6) + 50).ToString();
+                textGain.Text = ((newAngle / 2.6) + 50).ToString("0");
             }
 
             knobControl.Invalidate();
@@ -168,9 +168,6 @@ namespace ArtDist_GUI
                 else if (knobControl == KnobGain) startAngle = currentGainAngle;
 
             }
-
-
-            // OBS: Vi anropar INTE UpdateSettingsAndImage här. Uppdateringen sker vid dragning.
         }
         private void picturebox_mouseMoving(object sender, MouseEventArgs e)
         {
@@ -183,7 +180,7 @@ namespace ArtDist_GUI
             }
         }
 
-        private void pictureBox_MouseUp(object sender, MouseEventArgs e)
+        private void picturebox_MouseUp(object sender, MouseEventArgs e)
         {
         
             isDragging = false;
@@ -223,14 +220,22 @@ namespace ArtDist_GUI
             {
                 SaveFileName.Text = "File name not entered";
                 SaveFileName.Enabled = false;
-                await Delay();
+                await Delay(2000);
 
                 SaveFileName.Enabled = true;
                 SaveFileName.Text = "File name";
                 return;
             }
 
+
             presetmanager.Save(fileName, currentVolAngle, currentGainAngle, currentDistAngle);
+            SaveFileName.Text = fileName + " Successfully created!";
+            SaveFileName.Enabled = false;
+            await Delay(2000);
+            SaveFileName.Enabled = true;
+            SaveEnter.Visible = false;
+            SaveFileName.Visible = false;
+            
         }
 
         public bool ApplyLoadedSettings(float[] settings)
@@ -269,15 +274,15 @@ namespace ArtDist_GUI
 
         }
 
-        private async Task<int> Delay()
+        private async Task<int> Delay(int time)
         {
-            await Task.Delay(2000);
+            await Task.Delay(time);
             return 0;
         }
 
         private void LoadPresetFormButton_Click(object sender, EventArgs e)
         {
-            // Skapa en instans av laddningsformuläret och skicka med en referens till huvudformen (this).
+            // Skapar en instans av laddningsformuläret och skickar med en referens till huvudformen.
             LoadPresetForm loadForm = new LoadPresetForm(this);
             loadForm.ShowDialog();
         }
@@ -310,6 +315,8 @@ namespace ArtDist_GUI
                     AudioFilesBox.Items.Add(fileName);
                 }
             }
+
+
             catch (Exception ex)
             {
                 MessageBox.Show($"Could not read files: {ex.Message}", "File error");
@@ -327,9 +334,9 @@ namespace ArtDist_GUI
             if (AudioFilesBox.SelectedItem != null)
             {
                 string AudioFile = AudioFilesBox.SelectedItem.ToString();
-                audioEngine.play(AudioFile);
+                audioEngine.Play(AudioFile);
 
-                // NYTT: Tvinga ljudmotorn att hämta de aktuella värdena från rattarna direkt när ljudet startar!
+                // Tvinga ljudmotorn att hämta de aktuella värdena från rattarna direkt när ljudet startar!
 
                 // Räkna ut volymen baserat på rattens nuvarande position
                 float currentVol = (currentVolAngle + 130f) / 260f;
@@ -356,7 +363,7 @@ namespace ArtDist_GUI
             else
             {
                 LabelInfo.Text = "Nothing selected";
-                await Delay();
+                await Delay(2000);
                 LabelInfo.Text = "Welcome to AmpEx!";
             }
         }
@@ -364,6 +371,62 @@ namespace ArtDist_GUI
         private void RefreshButton_Click(object sender, EventArgs e)
         {
             LoadAudioFiles();
+        }
+
+        private void SaveFileName_click(object sender, EventArgs e)
+        {
+            TextBox tb = sender as TextBox;
+            if (tb != null)
+            {
+                if (tb.Text == "File name not entered" || tb.Text == "File name")
+                {
+                    tb.Text = "";
+                    tb.Enabled = true;
+                }
+            }
+        }
+        private void AudioFilesBox_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                e.Effect = DragDropEffects.Copy;
+            }
+            else
+            {
+                e.Effect = DragDropEffects.None;
+            }
+        }
+
+        private void AudioFilesBox_DragDrop(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+            {
+                string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+                foreach (string file in files)
+                {
+                    string extension = Path.GetExtension(file).ToLowerInvariant();
+                    if (extension == ".wav")
+                    {
+                        string destPath = Path.Combine(_saveDirectory, Path.GetFileName(file));
+                        try
+                        {
+                            
+                            // Skapa målmappen om den inte finns
+                            if (!Directory.Exists(_saveDirectory))
+                                Directory.CreateDirectory(_saveDirectory);
+
+                            File.Copy(file, destPath, true); // Skriv om ifall filen redan finns
+                        }
+                        catch (Exception ex)
+                        {
+                            MessageBox.Show($"Could not copy file: {ex.Message}", "Copy error");
+                        }
+                    }
+                }
+
+                LoadAudioFiles(); 
+            }
         }
     }
 }

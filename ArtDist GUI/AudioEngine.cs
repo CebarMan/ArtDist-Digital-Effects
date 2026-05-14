@@ -16,9 +16,9 @@ namespace ArtDist_GUI
 
         public VolumeSampleProvider MasterVolumeProvider { get; private set; }
 
-        public void play(string AudioFile)
+        public void Play(string AudioFile)
         {
-            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, AudioFile + ".wav");
+            string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioFiles", AudioFile + ".wav");
 
             if (!File.Exists(path))
             {
