@@ -33,6 +33,7 @@ namespace ArtDist_GUI
 
 
         private readonly string _saveDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "AudioFiles");
+        private readonly string _presetDirectory = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "LayoutFiles");
 
 
         public Form1()
@@ -48,6 +49,18 @@ namespace ArtDist_GUI
             AudioFilesBox.DragDrop += AudioFilesBox_DragDrop;
 
             LabelInfo.Text = "Welcome to ArtDist!";
+
+            if(_saveDirectory == null || !Directory.Exists(_saveDirectory))
+            {
+                Directory.CreateDirectory(_saveDirectory);
+                
+            }
+
+            if (_presetDirectory == null || !Directory.Exists(_presetDirectory))
+            {
+                Directory.CreateDirectory(_presetDirectory);
+
+            }
         }
 
         private void Generic_Knob_Paint(object sender, PaintEventArgs e)
