@@ -37,7 +37,7 @@ namespace ArtDist_GUI
             InfoLabel.Text = string.Empty;
 
             if (!Directory.Exists(_saveDirectory)) {
-                MessageBox.Show("Save list was not found", "Error");
+                InfoLabel.Text = "Save list not found";
                 return;
             }
             try
